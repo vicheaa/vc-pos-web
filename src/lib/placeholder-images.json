@@ -1,3 +1,76 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "prod_1",
+      "description": "Coffee Beans",
+      "imageUrl": "https://images.unsplash.com/photo-1580933073521-dc49ac0d4e6a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjb2ZmZWUlMjBiZWFuc3xlbnwwfHx8fDE3NjEzNTYzODV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "coffee beans"
+    },
+    {
+      "id": "prod_2",
+      "description": "Croissant",
+      "imageUrl": "https://images.unsplash.com/photo-1618667060775-1fe102237f94?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjcm9pc3NhbnQlMjBwYXN0cnl8ZW58MHx8fHwxNzYxMzkwOTcyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "croissant pastry"
+    },
+    {
+      "id": "prod_3",
+      "description": "Espresso Machine",
+      "imageUrl": "https://images.unsplash.com/photo-1581068106019-5aa70c6ab424?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxlc3ByZXNzbyUyMG1hY2hpbmV8ZW58MHx8fHwxNzYxNDY5Mjk1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "espresso machine"
+    },
+    {
+      "id": "prod_4",
+      "description": "Milk Carton",
+      "imageUrl": "https://images.unsplash.com/photo-1685531309627-f0c9e8656ff9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxtaWxrJTIwY2FydG9ufGVufDB8fHx8MTc2MTQyMDU4OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "milk carton"
+    },
+    {
+      "id": "prod_5",
+      "description": "Bagel",
+      "imageUrl": "https://images.unsplash.com/photo-1645995884824-8a7230f158f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxiYWdlbCUyMGJyZWFkfGVufDB8fHx8MTc2MTQ3MDkyMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "bagel bread"
+    },
+    {
+      "id": "prod_6",
+      "description": "Muffin",
+      "imageUrl": "https://images.unsplash.com/photo-1613119719948-d53865658a88?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxibHVlYmVycnklMjBtdWZmaW58ZW58MHx8fHwxNzYxNDMxMTM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "blueberry muffin"
+    },
+    {
+      "id": "prod_7",
+      "description": "Tea Box",
+      "imageUrl": "https://images.unsplash.com/photo-1635716088112-ee90afa0b294?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx0ZWElMjBib3h8ZW58MHx8fHwxNzYxNDU5NzQyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "tea box"
+    },
+    {
+      "id": "prod_8",
+      "description": "Sandwich",
+      "imageUrl": "https://images.unsplash.com/photo-1712746784291-e29d5d2694d4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxjbHViJTIwc2FuZHdpY2h8ZW58MHx8fHwxNzYxMzU2Mzg1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "club sandwich"
+    },
+    {
+      "id": "prod_9",
+      "description": "Orange Juice",
+      "imageUrl": "https://images.unsplash.com/photo-1618046364546-81e9d03d39a6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxvcmFuZ2UlMjBqdWljZXxlbnwwfHx8fDE3NjEzNzYzNTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "orange juice"
+    },
+    {
+      "id": "prod_10",
+      "description": "Cupcake",
+      "imageUrl": "https://images.unsplash.com/photo-1690584176786-d3401cfa165f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjaG9jb2xhdGUlMjBjdXBjYWtlfGVufDB8fHx8MTc2MTQ3MDkyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "chocolate cupcake"
+    },
+    {
+      "id": "prod_11",
+      "description": "Donut",
+      "imageUrl": "https://images.unsplash.com/photo-1713764221892-d210a0ce0cfc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzcHJpbmtsZWQlMjBkb251dHxlbnwwfHx8fDE3NjE0NzA5MjF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "sprinkled donut"
+    },
+    {
+      "id": "prod_12",
+      "description": "Water Bottle",
+      "imageUrl": "https://images.unsplash.com/photo-1664714628878-9d2aa898b9e3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx3YXRlciUyMGJvdHRsZXxlbnwwfHx8fDE3NjE0MjE4ODV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "water bottle"
+    }
+  ]
 }
