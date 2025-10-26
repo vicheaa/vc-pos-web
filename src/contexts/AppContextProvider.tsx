@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { AuthProvider } from './AuthContext';
-import { CartProvider } from './CartContext';
-import { ThemeProvider } from '@/components/ThemeProvider';
+import React from "react";
+import { AuthProvider } from "./AuthContext";
+import { CartProvider } from "./CartContext";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   return (

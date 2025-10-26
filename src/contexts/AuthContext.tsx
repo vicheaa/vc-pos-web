@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import type { User } from '@/types';
-import React, { createContext, useState, useEffect } from 'react';
+import type { User } from "@/types";
+import React, { createContext, useState, useEffect } from "react";
 
 // A mock user for demonstration
 const MOCK_USER: User = {
   id: 1,
-  name: 'John Doe',
-  email: 'john.doe@example.com',
-  role: 'Cashier',
+  name: "John Doe",
+  email: "john.doe@example.com",
+  role: "Cashier",
 };
 
 interface AuthContextType {
@@ -18,7 +18,9 @@ interface AuthContextType {
   logout: () => void;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined
+);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -28,8 +30,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // In a real app, you'd verify a token from localStorage/cookies here
     // For now, we'll simulate a logged-out user after a short delay
     const timer = setTimeout(() => {
-        setUser(null);
-        setLoading(false);
+      setUser(null);
+      setLoading(false);
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -38,7 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     // Mock API call
     setLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     // In a real app, you'd get a JWT and user data from the API
     setUser(MOCK_USER);
     setLoading(false);

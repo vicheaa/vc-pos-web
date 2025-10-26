@@ -1,10 +1,10 @@
-# **App Name**: SwiftPOS
+# **App Name**: VC-POS
 
 ## Core Features:
 
 - Authentication & Authorization: Secure login/logout with role-based access (Admin, Cashier, Manager) and JWT-based session management.
 - Product Management: Manage product catalog with CRUD operations, categories, stock levels, images, and UOM. Uses the /api/products and /api/categories endpoints.
-- Promotion System: Interface to manage promotions with percentage and fixed amounts. Preview available before applying.  Utilizes the /api/promotions and /api/cart/check-promotion endpoints.
+- Promotion System: Interface to manage promotions with percentage and fixed amounts. Preview available before applying. Utilizes the /api/promotions and /api/cart/check-promotion endpoints.
 - Shopping Cart & Checkout: Add/remove products, adjust quantities, apply promotions, select customer, and view order summary with real-time calculations.
 - Order Management: View order history, track order status, search orders, and generate receipts.
 - Customer Management: Maintain customer database, search customers, view order history, and manage customer information.

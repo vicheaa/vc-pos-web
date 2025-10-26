@@ -1,8 +1,14 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import type { Product, CartItem } from '@/types';
-import { useToast } from '@/hooks/use-toast';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+import type { Product, CartItem } from "@/types";
+import { useToast } from "@/hooks/use-toast";
 
 interface CartContextType {
   cartItems: CartItem[];
@@ -23,7 +29,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     try {
-      const storedCart = localStorage.getItem('swiftpos-cart');
+      const storedCart = localStorage.getItem("pos-cart");
       if (storedCart) {
         setCartItems(JSON.parse(storedCart));
       }
@@ -34,15 +40,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const persistCart = useCallback((items: CartItem[]) => {
-    localStorage.setItem('swiftpos-cart', JSON.stringify(items));
+    localStorage.setItem("pos-cart", JSON.stringify(items));
   }, []);
 
   const addToCart = (product: Product) => {
-    setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.product.id === product.id);
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find(
+        (item) => item.product.id === product.id
+      );
       let newItems;
       if (existingItem) {
-        newItems = prevItems.map(item =>
+        newItems = prevItems.map((item) =>
           item.product.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
@@ -59,8 +67,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const removeFromCart = (productId: string) => {
-    setCartItems(prevItems => {
-      const newItems = prevItems.filter(item => item.product.id !== productId);
+    setCartItems((prevItems) => {
+      const newItems = prevItems.filter(
+        (item) => item.product.id !== productId
+      );
       persistCart(newItems);
       return newItems;
     });
@@ -71,8 +81,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       removeFromCart(productId);
       return;
     }
-    setCartItems(prevItems => {
-      const newItems = prevItems.map(item =>
+    setCartItems((prevItems) => {
+      const newItems = prevItems.map((item) =>
         item.product.id === productId ? { ...item, quantity } : item
       );
       persistCart(newItems);
@@ -82,15 +92,32 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const clearCart = () => {
     setCartItems([]);
-    localStorage.removeItem('swiftpos-cart');
+    localStorage.removeItem("pos-cart");
   };
 
-  const cartSubtotal = cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
+  const cartSubtotal = cartItems.reduce(
+    (total, item) => total + item.product.price * item.quantity,
+    0
+  );
   const cartTotal = cartSubtotal; // For now, total is same as subtotal. Promotions will change this.
-  const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const totalItems = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQuantity, clearCart, cartTotal, cartSubtotal, totalItems }}>
+    <CartContext.Provider
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        clearCart,
+        cartTotal,
+        cartSubtotal,
+        totalItems,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
@@ -99,7 +126,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 export const useCart = () => {
   const context = useContext(CartContext);
   if (context === undefined) {
-    throw new Error('useCart must be used within a CartProvider');
+    throw new Error("useCart must be used within a CartProvider");
   }
   return context;
 };

@@ -2,7 +2,7 @@ export type User = {
   id: number;
   name: string;
   email: string;
-  role: 'Admin' | 'Cashier' | 'Manager';
+  role: "Admin" | "Cashier" | "Manager";
 };
 
 export type Product = {
@@ -25,7 +25,7 @@ export type Order = {
   id: string;
   customerName: string;
   total: number;
-  status: 'Pending' | 'Completed' | 'Cancelled';
+  status: "Pending" | "Completed" | "Cancelled";
   date: string;
 };
 
