@@ -1,18 +1,12 @@
 "use client";
 
-import type { User } from "@/types";
-import React, { createContext, useState, useEffect } from "react";
-
-// A mock user for demonstration
-const MOCK_USER: User = {
-  id: 1,
-  name: "John Doe",
-  email: "john.doe@example.com",
-  role: "Cashier",
-};
+import type { Profile } from "@/types";
+import React, { createContext, useEffect } from "react";
+import { useCurrentUser, useLogin, useLogout } from "@/hooks/useAuthQueries";
+import Cookies from "js-cookie";
 
 interface AuthContextType {
-  user: User | null;
+  user: Profile | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
@@ -23,37 +17,39 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 );
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: user, isLoading, error } = useCurrentUser();
+  const loginMutation = useLogin();
+  const logoutMutation = useLogout();
 
+  // Handle authentication errors silently
   useEffect(() => {
-    // In a real app, you'd verify a token from localStorage/cookies here
-    // For now, we'll simulate a logged-out user after a short delay
-    const timer = setTimeout(() => {
-      setUser(null);
-      setLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
+    if (error) {
+      // If there's an auth error, token is likely invalid - it's already handled in the query
+      const token = Cookies.get("auth_token");
+      if (token) {
+        // Token exists but query failed - remove it
+        Cookies.remove("auth_token");
+      }
+    }
+  }, [error]);
 
   const login = async (email: string, password: string) => {
-    // Mock API call
-    setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    // In a real app, you'd get a JWT and user data from the API
-    setUser(MOCK_USER);
-    setLoading(false);
+    await loginMutation.mutateAsync({ email, password });
+    // After successful login, user data will be automatically refetched by React Query
   };
 
-  const logout = () => {
-    // Mock API call
-    setUser(null);
-    // In a real app, you'd clear the token from storage
+  const logout = async () => {
+    await logoutMutation.mutateAsync();
   };
+
+  // Loading state: query is loading OR mutation is in progress
+  const loading =
+    isLoading || loginMutation.isPending || logoutMutation.isPending;
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider
+      value={{ user: user || null, loading, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -4,10 +4,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { DollarSign, Package, Users, ShoppingCart } from 'lucide-react';
-import { SalesChart } from './components/SalesChart';
-import { RecentSales } from './components/RecentSales';
+} from "@/components/ui/card";
+import { DollarSign, Package, Users, ShoppingCart } from "lucide-react";
+import { SalesChart } from "./components/SalesChart";
+import { RecentSales } from "./components/RecentSales";
 
 export default function DashboardPage() {
   return (
@@ -51,7 +51,9 @@ export default function DashboardPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Products in Stock</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Products in Stock
+            </CardTitle>
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -74,9 +76,7 @@ export default function DashboardPage() {
         <Card className="lg:col-span-3">
           <CardHeader>
             <CardTitle>Recent Sales</CardTitle>
-            <CardDescription>
-              You made 265 sales this month.
-            </CardDescription>
+            <CardDescription>You made 265 sales this month.</CardDescription>
           </CardHeader>
           <CardContent>
             <RecentSales />

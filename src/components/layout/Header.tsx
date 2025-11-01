@@ -17,6 +17,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UserNav } from "./UserNav";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -52,8 +53,8 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-30 my-2 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 bg-white">
-      <div className="text-sm text-muted-foreground font-semibold">
+    <header className="sticky top-0 my-2 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 bg-white">
+      <div className="text-sm font-semibold">
         <p> VC-POS {formatDateTime(currentDateTime)}</p>
       </div>
       <div className="flex justify-center items-center gap-4">

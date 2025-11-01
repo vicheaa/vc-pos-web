@@ -1,12 +1,12 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-export default function SettingsPage() {
+export default function StocksPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Settings</CardTitle>
+        <CardTitle>Stock</CardTitle>
       </CardHeader>
       <CardContent>
-        <p>System settings will be here.</p>
+        <p>Stock movement tracking here</p>
       </CardContent>
     </Card>
   );

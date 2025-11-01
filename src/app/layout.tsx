@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "VC-POS",
-  description: "A modern, responsive Point of Sale system.",
+  description: "Point of Sale system.",
 };
 
 export default function RootLayout({

@@ -1,10 +1,3 @@
-export type User = {
-  id: number;
-  name: string;
-  email: string;
-  role: "Admin" | "Cashier" | "Manager";
-};
-
 export type Product = {
   id: string;
   name: string;
@@ -13,7 +6,7 @@ export type Product = {
   stock: number;
   imageUrl: string;
   imageHint: string;
-  uom: string; // Unit of Measurement
+  uom: string;
 };
 
 export type CartItem = {
@@ -36,3 +29,38 @@ export type Customer = {
   phone: string;
   orderHistory: Order[];
 };
+
+// =====================
+// =====================
+
+export interface Root {
+  success: boolean;
+  message: string;
+  data: Profile;
+}
+
+export interface Profile {
+  id: number;
+  name: string;
+  email: string;
+  email_verified_at?: string;
+  role_id?: number;
+  created_at?: string;
+  updated_at?: string;
+  role?: Role;
+}
+
+export interface Role {
+  id: number;
+  name: string;
+  display_name: string;
+  display_name_kh: string;
+  restricted: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface LoginResponse {
+  token: string;
+  token_type: string;
+}
