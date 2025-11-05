@@ -1,91 +1,65 @@
-import Cookies from "js-cookie";
+// Re-export ApiError and apiClient from api-client for backward compatibility
+export { ApiError, apiClient } from "./api-client";
+
+// Re-export API services
+export {
+  authApi,
+  productApi,
+  categoryApi,
+  uomApi,
+  attachmentApi,
+  AuthApiService,
+  ProductApiService,
+  CategoryApiService,
+  UOMApiService,
+  AttachmentApiService,
+} from "./api-services";
+
 import type {
-  Root as ProfileRoot,
   Profile as ApiUser,
   LoginResponse,
+  ProductsResponse,
+  Category,
+  UOM,
 } from "@/types";
-
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
 // The profile endpoint returns { success, message, data }
 // where data matches the ApiUser (Data) type from src/types
 export type UserResponse = ApiUser;
 
-export class ApiError extends Error {
-  constructor(public status: number, message: string) {
-    super(message);
-  }
-}
-
-async function request<T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<T> {
-  const token = Cookies.get("auth_token");
-
-  const headers: HeadersInit = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-    ...options.headers,
-  };
-
-  if (token) {
-    (headers as Record<string, string>)["Authorization"] = `Bearer ${token}`;
-  }
-
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
-
-  if (!response.ok) {
-    let errorMessage = "An error occurred";
-    try {
-      const errorData = await response.json();
-      errorMessage = errorData.message || errorMessage;
-    } catch {
-      errorMessage = `HTTP ${response.status}: ${response.statusText}`;
-    }
-    throw new ApiError(response.status, errorMessage);
-  }
-
-  const data = await response.json();
-  return data;
-}
+// Backward compatibility: Export api object with old interface
+// This allows existing code to continue working without changes
+import {
+  authApi,
+  productApi,
+  categoryApi,
+  uomApi,
+  attachmentApi,
+} from "./api-services";
 
 export const api = {
-  login: async (email: string, password: string): Promise<LoginResponse> => {
-    const response = await request<LoginResponse>("/auth/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    });
-
-    // Store token in cookie
-    if (response.token) {
-      Cookies.set("auth_token", response.token, {
-        expires: 7,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-      });
-    }
-
-    return response;
-  },
-
-  logout: async (): Promise<void> => {
-    try {
-      await request("/auth/logout", { method: "POST" });
-    } catch (error) {
-      console.error("Logout API error:", error);
-    } finally {
-      // Remove token from cookie regardless of API response
-      Cookies.remove("auth_token");
-    }
-  },
-
-  getCurrentUser: async (): Promise<UserResponse> => {
-    const resp = await request<ProfileRoot>("/auth/profile");
-    return resp.data as ApiUser;
-  },
+  login: (email: string, password: string) => authApi.login(email, password),
+  logout: () => authApi.logout(),
+  getCurrentUser: () => authApi.getCurrentUser(),
+  getProducts: (params?: {
+    page?: number;
+    per_page?: number;
+    search?: string;
+    category_code?: string;
+  }) => productApi.getProducts(params),
+  getCategories: () => categoryApi.getCategories(),
+  getUOMs: () => uomApi.getUOMs(),
+  uploadAttachment: (file: File, attachTo?: string) =>
+    attachmentApi.uploadAttachment(file, attachTo),
+  createProduct: (product: {
+    code: string;
+    name: string;
+    name_kh: string;
+    description: string;
+    cost_price: number;
+    selling_price: number;
+    uom_id: number;
+    category_code: string;
+    thumbnail: string;
+  }) => productApi.createProduct(product),
 };

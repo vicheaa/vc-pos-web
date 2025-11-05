@@ -13,7 +13,14 @@ import {
   PanelLeft,
   Search,
 } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
+import { VisuallyHidden } from "@/components/ui/visually-hidden";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UserNav } from "./UserNav";
@@ -54,7 +61,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 my-2 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 bg-white">
-      <div className="text-sm font-semibold">
+      <div className="hidden text-sm font-semibold sm:block">
         <p> VC-POS {formatDateTime(currentDateTime)}</p>
       </div>
       <div className="flex justify-center items-center gap-4">
@@ -66,6 +73,12 @@ export function Header() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="sm:max-w-xs">
+            <VisuallyHidden>
+              <SheetTitle>Navigation Menu</SheetTitle>
+              <SheetDescription>
+                Navigate to different sections of the application
+              </SheetDescription>
+            </VisuallyHidden>
             <nav className="grid gap-6 text-lg font-medium">
               <Link
                 href="/dashboard"

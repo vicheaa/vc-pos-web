@@ -1,3 +1,45 @@
+// API Product types (matches backend response)
+export interface UOM {
+  id: number;
+  name: string;
+  name_kh: string;
+  symbol: string | null;
+}
+
+export interface ApiProduct {
+  code: string;
+  name: string;
+  name_kh: string;
+  thumbnail: string;
+  description: string;
+  cost_price: number;
+  selling_price: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  uom_id: number;
+  category_code: string;
+  created_by: number | null;
+  uom: UOM;
+  category: Category;
+}
+
+export interface ProductsResponse {
+  total: number;
+  next: string | null;
+  previous: string | null;
+  data: ApiProduct[];
+}
+
+export interface Category {
+  code: string;
+  name: string;
+  name_kh: string;
+  thumnail: string; // Note: API has typo "thumnail" instead of "thumbnail"
+  description: string;
+}
+
+// Legacy Product type (for compatibility)
 export type Product = {
   id: string;
   name: string;

@@ -23,7 +23,7 @@ import {
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/pos", icon: ShoppingCart, label: "POS" },
-  { href: "/products", icon: Package, label: "Products" },
+  { href: "/product", icon: Package, label: "Product" },
   { href: "/orders", icon: ClipboardList, label: "Orders" },
   { href: "/customers", icon: Users, label: "Customers" },
   { href: "/promotions", icon: Percent, label: "Promotions" },
