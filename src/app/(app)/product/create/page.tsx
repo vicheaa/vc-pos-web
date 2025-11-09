@@ -37,6 +37,8 @@ import { useUOMs } from "@/hooks/useUOMQueries";
 import { api } from "@/lib/api";
 import { Loader2, Upload, X } from "lucide-react";
 import Image from "next/image";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { Permission } from "@/lib/permissions";
 
 const productFormSchema = z.object({
   code: z.string().min(1, "Product code is required"),
@@ -58,7 +60,7 @@ const productFormSchema = z.object({
 
 type ProductFormData = z.infer<typeof productFormSchema>;
 
-export default function CreateProductPage() {
+function CreateProductPageContent() {
   const router = useRouter();
   const { toast } = useToast();
   const { data: categories, isLoading: categoriesLoading } = useCategories();
@@ -528,5 +530,13 @@ export default function CreateProductPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function CreateProductPage() {
+  return (
+    <ProtectedRoute permissions={[Permission.CREATE_PRODUCT]}>
+      <CreateProductPageContent />
+    </ProtectedRoute>
   );
 }

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { Permission } from "@/lib/permissions";
 import {
   Card,
   CardHeader,
@@ -27,7 +29,7 @@ import { Button } from "@/components/ui/button";
 const ITEMS_PER_PAGE = 20;
 const SEARCH_DEBOUNCE_MS = 300;
 
-export default function ProductsPage() {
+function ProductsContent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -221,5 +223,13 @@ export default function ProductsPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <ProtectedRoute permissions={[Permission.VIEW_PRODUCTS]}>
+      <ProductsContent />
+    </ProtectedRoute>
   );
 }

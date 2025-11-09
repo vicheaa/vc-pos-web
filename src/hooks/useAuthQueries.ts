@@ -22,11 +22,8 @@ export function useCurrentUser() {
     queryKey: authKeys.currentUser(),
     queryFn: async () => {
       const userData = await api.getCurrentUser();
-      return {
-        id: userData.id,
-        name: userData.name,
-        email: userData.email,
-      } as Profile;
+      // Return full profile including role
+      return userData as Profile;
     },
     enabled: !!token, // Only run query if token exists
     retry: (failureCount, error) => {

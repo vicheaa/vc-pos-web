@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -8,8 +10,10 @@ import {
 import { DollarSign, Package, Users, ShoppingCart } from "lucide-react";
 import { SalesChart } from "./components/SalesChart";
 import { RecentSales } from "./components/RecentSales";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { Permission } from "@/lib/permissions";
 
-export default function DashboardPage() {
+function DashboardContent() {
   return (
     <div className="flex flex-col gap-4">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -84,5 +88,13 @@ export default function DashboardPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <ProtectedRoute permissions={[Permission.VIEW_DASHBOARD]}>
+      <DashboardContent />
+    </ProtectedRoute>
   );
 }

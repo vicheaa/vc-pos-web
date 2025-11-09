@@ -1,13 +1,26 @@
+"use client";
+
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { Permission } from "@/lib/permissions";
+
+function PromotionsContent() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Promotions</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>Promotion management interface will be here.</p>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function PromotionsPage() {
-    return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Promotions</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <p>Promotion management interface will be here.</p>
-            </CardContent>
-        </Card>
-    );
+  return (
+    <ProtectedRoute permissions={[Permission.VIEW_PROMOTIONS]}>
+      <PromotionsContent />
+    </ProtectedRoute>
+  );
 }
