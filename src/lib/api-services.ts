@@ -223,9 +223,35 @@ export class AttachmentApiService {
   }
 }
 
+/**
+ * Order API Service
+ */
+export class OrderApiService {
+  /**
+   * Create a new order
+   */
+  async createOrder(data: {
+    items: {
+      product_code: string;
+      quantity: number;
+    }[];
+  }): Promise<{
+    success: boolean;
+    message: string;
+    data: any;
+  }> {
+    return apiClient.post<{
+      success: boolean;
+      message: string;
+      data: any;
+    }>("/orders", data);
+  }
+}
+
 // Export singleton instances
 export const authApi = new AuthApiService();
 export const productApi = new ProductApiService();
 export const categoryApi = new CategoryApiService();
 export const uomApi = new UOMApiService();
 export const attachmentApi = new AttachmentApiService();
+export const orderApi = new OrderApiService();

@@ -9,13 +9,15 @@ import React, {
 } from "react";
 import type { Product, CartItem } from "@/types";
 import { useToast } from "@/hooks/use-toast";
+import { orderApi } from "@/lib/api-services";
 
 interface CartContextType {
   cartItems: CartItem[];
-  addToCart: (product: Product) => void;
+  addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
+  submitOrder: () => Promise<void>;
   cartTotal: number;
   cartSubtotal: number;
   totalItems: number;
@@ -43,7 +45,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("pos-cart", JSON.stringify(items));
   }, []);
 
-  const addToCart = (product: Product) => {
+  const addToCart = (product: Product, quantity: number = 1) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find(
         (item) => item.product.id === product.id
@@ -52,18 +54,59 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (existingItem) {
         newItems = prevItems.map((item) =>
           item.product.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       } else {
-        newItems = [...prevItems, { product, quantity: 1 }];
+        newItems = [...prevItems, { product, quantity }];
       }
       persistCart(newItems);
       return newItems;
     });
     toast({
+      id: "add-to-cart",
       title: `${product.name} added to cart`,
+      duration: 2000,
     });
+  };
+
+  const submitOrder = async () => {
+    if (cartItems.length === 0) {
+      toast({
+        title: "Cart is empty",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const payload = {
+        items: cartItems.map((item) => ({
+          product_code: item.product.id,
+          quantity: item.quantity,
+        })),
+      };
+
+      const response = await orderApi.createOrder(payload);
+
+      if (response.success) {
+        clearCart();
+        toast({
+          title: "Order submitted successfully",
+          description: response.message,
+        });
+      } else {
+        throw new Error(response.message || "Failed to submit order");
+      }
+    } catch (error: any) {
+      console.error("Submit order error:", error);
+      toast({
+        title: "Error submitting order",
+        description: error.message || "Something went wrong",
+        variant: "destructive",
+      });
+      throw error;
+    }
   };
 
   const removeFromCart = (productId: string) => {
@@ -113,6 +156,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         removeFromCart,
         updateQuantity,
         clearCart,
+        submitOrder,
         cartTotal,
         cartSubtotal,
         totalItems,

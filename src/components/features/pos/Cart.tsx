@@ -50,12 +50,24 @@ function QuantityInput({
 }
 
 export function Cart() {
-  const { cartItems, updateQuantity, removeFromCart, cartSubtotal, cartTotal, totalItems, clearCart } = useCart();
+  const { cartItems, updateQuantity, removeFromCart, cartSubtotal, cartTotal, totalItems, clearCart, submitOrder } = useCart();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleCharge = async () => {
+    try {
+      setIsSubmitting(true);
+      await submitOrder();
+    } catch (error) {
+      // Error is handled in context
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
-    <div className="flex h-full flex-col backdrop-blur-sm bg-white">
+    <div className="flex h-full flex-col backdrop-blur-sm bg-background/50">
       <div className="flex items-center justify-between p-4 pb-2">
-        <h2 className="text-lg font-semibold tracking-tight">Current Order</h2>
+        <h2 className="text-lg font-semibold tracking-tight text-foreground">Current Order</h2>
         {cartItems.length > 0 && (
           <Button
             variant="ghost"
@@ -165,11 +177,12 @@ export function Cart() {
         </div>
 
         <Button
-          className="mt-4 w-full"
+          className="mt-4 w-full bg-accent rounded-lg font-semibold hover:bg-accent/90"
           size="lg"
-          disabled={cartItems.length === 0}
+          disabled={cartItems.length === 0 || isSubmitting}
+          onClick={handleCharge}
         >
-          Charge ${cartTotal.toFixed(2)}
+          {isSubmitting ? "Processing..." : `Charge $${cartTotal.toFixed(2)}`}
         </Button>
       </div>
     </div>

@@ -38,7 +38,7 @@ export function ProductGrid({ products, isLoading, error }: ProductGridProps) {
 
   return (  
     <ScrollArea className="h-full">
-      <div className="grid grid-cols-2 gap-4 p-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <div className="grid grid-cols-2 gap-4 p-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
