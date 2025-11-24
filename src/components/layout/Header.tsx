@@ -1,6 +1,7 @@
 "use client";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import {
   Flame,
   LayoutDashboard,
@@ -24,19 +25,11 @@ import { VisuallyHidden } from "@/components/ui/visually-hidden";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UserNav } from "./UserNav";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { cn } from "@/lib/utils";
 
-const navItems = [
-  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/pos", icon: ShoppingCart, label: "POS" },
-  { href: "/products", icon: Package, label: "Products" },
-  { href: "/orders", icon: ClipboardList, label: "Orders" },
-  { href: "/customers", icon: Users, label: "Customers" },
-  { href: "/promotions", icon: Percent, label: "Promotions" },
-  { href: "/settings", icon: Settings, label: "Settings" },
-];
-
 export function Header() {
+  const t = useTranslations();
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
   useEffect(() => {
@@ -59,24 +52,37 @@ export function Header() {
     });
   };
 
+  const navItems = [
+    { href: "/dashboard", icon: LayoutDashboard, label: t("nav.dashboard") },
+    { href: "/pos", icon: ShoppingCart, label: t("nav.pos") },
+    { href: "/products", icon: Package, label: t("nav.products") },
+    { href: "/orders", icon: ClipboardList, label: t("nav.orders") },
+    { href: "/customers", icon: Users, label: t("nav.customers") },
+    { href: "/promotions", icon: Percent, label: t("nav.promotions") },
+    { href: "/settings", icon: Settings, label: t("nav.settings") },
+  ];
+
   return (
     <header className="sticky top-0 my-2 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 bg-white">
       <div className="hidden text-sm font-semibold sm:block">
-        <p> VC-POS {formatDateTime(currentDateTime)}</p>
+        <p>
+          {" "}
+          {t("header.vcPos")} {formatDateTime(currentDateTime)}
+        </p>
       </div>
       <div className="flex justify-center items-center gap-4">
         <Sheet>
           <SheetTrigger asChild>
             <Button size="icon" variant="outline" className="sm:hidden">
               <PanelLeft className="h-5 w-5" />
-              <span className="sr-only">Toggle Menu</span>
+              <span className="sr-only">{t("nav.toggleMenu")}</span>
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="sm:max-w-xs">
             <VisuallyHidden>
-              <SheetTitle>Navigation Menu</SheetTitle>
+              <SheetTitle>{t("nav.navigationMenu")}</SheetTitle>
               <SheetDescription>
-                Navigate to different sections of the application
+                {t("nav.navigateToDifferentSections")}
               </SheetDescription>
             </VisuallyHidden>
             <nav className="grid gap-6 text-lg font-medium">
@@ -85,7 +91,7 @@ export function Header() {
                 className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
               >
                 <Flame className="h-5 w-5 transition-all group-hover:scale-110" />
-                <span className="sr-only">VC-POS</span>
+                <span className="sr-only">{t("header.vcPos")}</span>
               </Link>
               {navItems.map((item) => (
                 <Link
@@ -105,10 +111,11 @@ export function Header() {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Search..."
+            placeholder={t("common.search")}
             className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
           />
         </div>
+        <LanguageSwitcher />
         <UserNav />
       </div>
     </header>

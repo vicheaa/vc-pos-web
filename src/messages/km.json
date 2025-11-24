@@ -1,0 +1,69 @@
+{
+  "common": {
+    "search": "ស្វែងរក...",
+    "loading": "កំពុងផ្ទុក...",
+    "save": "រក្សាទុក",
+    "cancel": "បោះបង់",
+    "delete": "លុប",
+    "edit": "កែប្រែ",
+    "create": "បង្កើត",
+    "submit": "ដាក់ស្នើ",
+    "back": "ត្រលប់",
+    "next": "បន្ទាប់",
+    "previous": "មុន",
+    "close": "បិទ",
+    "confirm": "បញ្ជាក់",
+    "yes": "បាទ/ចាស",
+    "no": "ទេ"
+  },
+  "nav": {
+    "dashboard": "ផ្ទាំងគ្រប់គ្រង",
+    "pos": "ពន្ធលើការលក់",
+    "products": "ផលិតផល",
+    "orders": "ការកម្មង់",
+    "customers": "អតិថិជន",
+    "promotions": "ការផ្តល់ជូន",
+    "settings": "ការកំណត់",
+    "navigationMenu": "ម៉ឺនុយរុករក",
+    "navigateToDifferentSections": "រុករកទៅកាន់ផ្នែកផ្សេងៗនៃកម្មវិធី",
+    "toggleMenu": "បិទ/បើកម៉ឺនុយ"
+  },
+  "auth": {
+    "login": "ចូល",
+    "logout": "ចេញ",
+    "email": "អ៊ីមែល",
+    "password": "ពាក្យសម្ងាត់",
+    "emailPlaceholder": "ឈ្មោះ@example.com",
+    "passwordPlaceholder": "••••••••",
+    "loginSuccessful": "ចូលបានជោគជ័យ",
+    "welcomeBack": "សូមស្វាគមន៍មកវិញ!",
+    "loginFailed": "ចូលមិនបាន",
+    "checkCredentials": "សូមពិនិត្យព័ត៌មានចូលរបស់អ្នកហើយព្យាយាមម្តងទៀត។",
+    "invalidEmail": "អាសយដ្ឋានអ៊ីមែលមិនត្រឹមត្រូវ។",
+    "passwordMinLength": "ពាក្យសម្ងាត់ត្រូវតែមានយ៉ាងហោចណាស់ ៦ តួអក្សរ។"
+  },
+  "product": {
+    "productCode": "លេខកូដផលិតផល",
+    "productName": "ឈ្មោះផលិតផល",
+    "productNameKh": "ឈ្មោះផលិតផល (ខ្មែរ)",
+    "description": "ការពិពណ៌នា",
+    "costPrice": "តម្លៃដើម",
+    "sellingPrice": "តម្លៃលក់",
+    "unitOfMeasure": "ឯកតារង្វាស់",
+    "category": "ប្រភេទ",
+    "thumbnail": "រូបភាពតូច",
+    "createProduct": "បង្កើតផលិតផល",
+    "editProduct": "កែប្រែផលិតផល",
+    "productCodeRequired": "លេខកូដផលិតផលត្រូវការ",
+    "productNameRequired": "ឈ្មោះផលិតផលត្រូវការ",
+    "costPricePositive": "តម្លៃដើមត្រូវតែជាលេខវិជ្ជមាន",
+    "sellingPricePositive": "តម្លៃលក់ត្រូវតែជាលេខវិជ្ជមាន",
+    "uomRequired": "ឯកតារង្វាស់ត្រូវការ",
+    "categoryRequired": "ប្រភេទត្រូវការ",
+    "thumbnailRequired": "រូបភាពតូចត្រូវការ"
+  },
+  "header": {
+    "vcPos": "VC-POS"
+  }
+}
+

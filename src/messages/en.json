@@ -1,0 +1,69 @@
+{
+  "common": {
+    "search": "Search...",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "pos": "POS",
+    "products": "Products",
+    "orders": "Orders",
+    "customers": "Customers",
+    "promotions": "Promotions",
+    "settings": "Settings",
+    "navigationMenu": "Navigation Menu",
+    "navigateToDifferentSections": "Navigate to different sections of the application",
+    "toggleMenu": "Toggle Menu"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "emailPlaceholder": "name@example.com",
+    "passwordPlaceholder": "••••••••",
+    "loginSuccessful": "Login Successful",
+    "welcomeBack": "Welcome back!",
+    "loginFailed": "Login Failed",
+    "checkCredentials": "Please check your credentials and try again.",
+    "invalidEmail": "Invalid email address.",
+    "passwordMinLength": "Password must be at least 6 characters."
+  },
+  "product": {
+    "productCode": "Product Code",
+    "productName": "Product Name",
+    "productNameKh": "Product Name (Khmer)",
+    "description": "Description",
+    "costPrice": "Cost Price",
+    "sellingPrice": "Selling Price",
+    "unitOfMeasure": "Unit of Measure",
+    "category": "Category",
+    "thumbnail": "Thumbnail",
+    "createProduct": "Create Product",
+    "editProduct": "Edit Product",
+    "productCodeRequired": "Product code is required",
+    "productNameRequired": "Product name is required",
+    "costPricePositive": "Cost price must be positive",
+    "sellingPricePositive": "Selling price must be positive",
+    "uomRequired": "Unit of measure is required",
+    "categoryRequired": "Category is required",
+    "thumbnailRequired": "Thumbnail is required"
+  },
+  "header": {
+    "vcPos": "VC-POS"
+  }
+}
+

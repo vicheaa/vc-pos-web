@@ -3,7 +3,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { usePermissions } from "@/hooks/usePermissions";
 import { Permission } from "@/lib/permissions";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";

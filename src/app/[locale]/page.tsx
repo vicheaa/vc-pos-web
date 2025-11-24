@@ -1,12 +1,13 @@
 "use client";
 
 import { useAuth } from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { useEffect } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useTranslations } from "next-intl";
 import { Flame } from "lucide-react";
 
 export default function Home() {
+  const t = useTranslations("common");
   const { user, loading } = useAuth();
   const router = useRouter();
 
@@ -26,9 +27,8 @@ export default function Home() {
         <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary">
           <Flame className="h-8 w-8 animate-pulse text-primary-foreground" />
         </div>
-        <div className="space-y-2 text-center">
-          <h1 className="text-2xl font-bold">Loading VC-POS...</h1>
-          <p className="text-muted-foreground">Please wait a moment.</p>
+        <div className="text-center">
+          <p className="text-muted-foreground">{t("loading")}</p>
         </div>
       </div>
     </div>
