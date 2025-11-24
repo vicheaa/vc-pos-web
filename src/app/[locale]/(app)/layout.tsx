@@ -46,7 +46,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="sticky top-0 z-10 bg-slate-100 dark:bg-slate-900">
           <Header />
         </div>
-        <main className="flex-1 p-4 sm:p-6">{children}</main>
+        <main className="flex-1 p-2 sm:p-4">{children}</main>
       </div>
     </div>
   );

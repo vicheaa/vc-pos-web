@@ -6,6 +6,8 @@ import type {
   UOM,
   Root as ProfileRoot,
   Profile as ApiUser,
+  OrderDetailResponse,
+  OrdersResponse,
 } from "@/types";
 import Cookies from "js-cookie";
 
@@ -245,6 +247,28 @@ export class OrderApiService {
       message: string;
       data: any;
     }>("/orders", data);
+  }
+
+  /**
+   * Get orders with pagination
+   */
+  async getOrders(params?: {
+    page?: number;
+    per_page?: number;
+  }): Promise<OrdersResponse> {
+    return apiClient.get<OrdersResponse>("/orders", {
+      params: {
+        page: params?.page?.toString(),
+        per_page: params?.per_page?.toString(),
+      },
+    });
+  }
+
+  /**
+   * Get order details by ID
+   */
+  async getOrder(id: string): Promise<OrderDetailResponse> {
+    return apiClient.get<OrderDetailResponse>(`/orders/${id}`);
   }
 }
 

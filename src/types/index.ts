@@ -57,6 +57,49 @@ export type CartItem = {
   quantity: number;
 };
 
+export interface ApiOrder {
+  id: number;
+  invoice_no: string;
+  user_id: number;
+  customer_id: number | null;
+  subtotal: string;
+  total_discount: string;
+  grand_total: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ApiOrderItem {
+  id: number;
+  order_id: number;
+  product_code: string;
+  quantity: string;
+  unit_price: string;
+  promotion_id: number | null;
+  discount_amount: string;
+  line_total: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ApiOrderDetail extends ApiOrder {
+  order_items: ApiOrderItem[];
+}
+
+export interface OrderDetailResponse {
+  success: boolean;
+  message: string;
+  data: ApiOrderDetail;
+}
+
+export interface OrdersResponse {
+  total: number;
+  next: string | null;
+  previous: string | null;
+  orders: ApiOrder[];
+}
+
 export type Order = {
   id: string;
   customerName: string;
