@@ -74,6 +74,7 @@ export function Pagination({
         onClick={() => onPageChange(currentPage - 1)}
         disabled={!hasPrevious}
         aria-label="Previous page"
+        className="w-8 h-8"
       >
         <ChevronLeft className="h-4 w-4" />
       </Button>
@@ -100,7 +101,7 @@ export function Pagination({
               variant={isActive ? "default" : "outline"}
               size="icon"
               onClick={() => onPageChange(pageNum)}
-              className={cn("h-10 w-10", isActive && "pointer-events-none")}
+              className={cn("h-8 w-8", isActive && "pointer-events-none bg-accent")}
               aria-label={`Go to page ${pageNum}`}
               aria-current={isActive ? "page" : undefined}
             >
@@ -109,13 +110,13 @@ export function Pagination({
           );
         })}
       </div>
-
       <Button
         variant="outline"
         size="icon"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={!hasNext}
         aria-label="Next page"
+        className="w-8 h-8"
       >
         <ChevronRight className="h-4 w-4" />
       </Button>

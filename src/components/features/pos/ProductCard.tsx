@@ -23,7 +23,7 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Card className="group flex h-full flex-col overflow-hidden border-muted-foreground/20 transition-all hover:shadow-lg">
+    <Card className="group flex h-full flex-col overflow-hidden transition-all hover:shadow-md border-none">
       <div className="relative aspect-square w-full overflow-hidden bg-muted/50">
         <Image
           src={`${imageUrl}/${product.thumbnail}`}
@@ -44,17 +44,17 @@ export function ProductCard({ product }: ProductCardProps) {
       </CardContent>
 
       <CardFooter className="mt-auto flex items-center justify-between p-4 pt-0">
-        <p className="text-xl font-bold text-accent">
+        <p className="text-xl font-semibold text-foreground">
           ${product.price.toFixed(2)}
         </p>
         <Button
           size="icon"
-          className="h-9 w-9 rounded-full shrink-0 transition-transform active:scale-95 bg-accent hover:bg-accent/90"
+          className="group h-9 w-9 rounded-full shrink-0 transition-transform active:scale-95 bg-background hover:bg-background/90"
           onClick={handleAddToCart}
           aria-label={`Add ${product.name} to cart`}
         >
-          <ShoppingCart className="h-4 w-4" />
-        </Button>
+          <ShoppingCart className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-accent" />
+        </Button> 
       </CardFooter>
     </Card>
   );

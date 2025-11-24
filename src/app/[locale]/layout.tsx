@@ -50,7 +50,7 @@ export default async function LocaleLayout({
   }
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning={true}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -61,11 +61,12 @@ export default async function LocaleLayout({
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet"
+          suppressHydrationWarning={true}
         />
       </head>
       <body
         className={cn("min-h-screen bg-background font-body antialiased")}
-        suppressHydrationWarning
+        suppressHydrationWarning={true}
       >
         <NextIntlClientProvider messages={messages}>
           <AppProvider>

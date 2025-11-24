@@ -19,7 +19,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   if (loading || !user) {
     return (
-      <div className="flex min-h-screen w-full bg-muted/40">
+      <div className="flex min-h-screen w-full bg-muted/40" suppressHydrationWarning={true}>
         <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
           <Skeleton className="h-full w-full" />
         </aside>
@@ -40,7 +40,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen w-full bg-muted/40">
+    <div className="flex min-h-screen w-full bg-muted/40" suppressHydrationWarning={true}>
       <SidebarNav />
       <div className="flex flex-1 flex-col sm:pl-14">
         <div className="sticky top-0 z-10 bg-slate-100 dark:bg-slate-900">
