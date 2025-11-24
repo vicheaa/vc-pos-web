@@ -47,6 +47,7 @@ export type Product = {
   price: number;
   stock: number;
   imageUrl: string;
+  thumbnail: string;
   imageHint: string;
   uom: string;
 };
@@ -71,9 +72,6 @@ export type Customer = {
   phone: string;
   orderHistory: Order[];
 };
-
-// =====================
-// =====================
 
 export interface Root {
   success: boolean;

@@ -1,0 +1,1 @@
+export const imageUrl = process.env.NEXT_PUBLIC_IMG_BASE_URL;

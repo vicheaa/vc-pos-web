@@ -22,7 +22,7 @@ export function ApiProductCard({ product, onClick }: ApiProductCardProps) {
     >
       <div className="relative aspect-square w-full bg-muted">
         <Image
-          src={`${process.env.NEXT_PUBLIC_IMG_BASE_URL}/storage/${product.thumbnail}`}
+          src={`${process.env.NEXT_PUBLIC_IMG_BASE_URL}/${product.thumbnail}`}
           alt={product.name}
           fill
           sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"

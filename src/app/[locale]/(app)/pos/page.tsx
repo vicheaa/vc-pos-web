@@ -11,7 +11,7 @@ function POSContent() {
       <div className="lg:col-span-2">
         <ProductGrid />
       </div>
-      <div className="lg:col-span-1">
+      <div className="sticky top-20 lg:col-span-1 h-[80vh] overflow-y-auto">
         <Cart />
       </div>
     </div>

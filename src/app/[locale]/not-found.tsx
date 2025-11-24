@@ -8,7 +8,7 @@ export default function NotFound() {
         <h1 className="text-9xl font-extrabold tracking-widest text-accent md:text-[12rem]">
           404
         </h1>
-        <div className="absolute top-1/2 -translate-y-1/2 rounded-full bg-accent px-6 py-2 text-sm font-semibold uppercase tracking-wider text-primary-foreground shadow-lg shadow-primary/50 md:text-base">
+        <div className="absolute top-1/2 -translate-y-1/2 rounded-full bg-red-500 px-6 py-2 text-sm font-semibold uppercase tracking-wider text-primary-foreground shadow-lg shadow-primary/50 md:text-base">
           Page Not Found
         </div>
       </div>
