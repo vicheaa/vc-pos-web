@@ -10,6 +10,8 @@ import React, {
 import type { Product, CartItem } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { orderApi } from "@/lib/api-services";
+import { saveOfflineOrder, getOfflineOrders, deleteOfflineOrder } from "@/lib/db";
+
 
 interface CartContextType {
   cartItems: CartItem[];
@@ -39,7 +41,50 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       console.error("Failed to parse cart from localStorage", error);
       setCartItems([]);
     }
+
+    // Sync offline orders when coming back online
+    const handleOnline = async () => {
+      toast({
+        title: "Back online",
+        description: "Syncing offline orders...",
+      });
+      await syncOfflineOrders();
+    };
+
+    window.addEventListener('online', handleOnline);
+    return () => window.removeEventListener('online', handleOnline);
   }, []);
+
+  const syncOfflineOrders = async () => {
+    try {
+      const offlineOrders = await getOfflineOrders();
+      if (offlineOrders.length === 0) return;
+
+      let syncedCount = 0;
+      for (const order of offlineOrders) {
+        try {
+          const payload = { items: order.items };
+          const response = await orderApi.createOrder(payload);
+          if (response.success) {
+            await deleteOfflineOrder(order.id);
+            syncedCount++;
+          }
+        } catch (error) {
+          console.error("Failed to sync order", order.id, error);
+        }
+      }
+
+      if (syncedCount > 0) {
+        toast({
+          title: "Sync Complete",
+          description: `Successfully synced ${syncedCount} offline orders.`,
+        });
+      }
+    } catch (error) {
+      console.error("Error syncing offline orders:", error);
+    }
+  };
+
 
   const persistCart = useCallback((items: CartItem[]) => {
     localStorage.setItem("pos-cart", JSON.stringify(items));
@@ -80,6 +125,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
 
     try {
+      if (!navigator.onLine) {
+        throw new Error("Offline");
+      }
+
       const payload = {
         items: cartItems.map((item) => ({
           product_code: item.product.id,
@@ -99,7 +148,33 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         throw new Error(response.message || "Failed to submit order");
       }
     } catch (error: any) {
-      console.error("Submit order error:", error);
+      if (error.message !== "Offline") {
+        console.error("Submit order error:", error);
+      }
+
+      
+      // If offline or network error, save to local DB
+      if (!navigator.onLine || error.message === "Offline" || error.message === "Failed to fetch") {
+        try {
+          await saveOfflineOrder(cartItems);
+          clearCart();
+          toast({
+            title: "Order saved offline",
+            description: "Your order has been saved locally and will be synced when you are back online.",
+            duration: 5000,
+          });
+          return; // Successfully handled offline
+        } catch (dbError) {
+          console.error("Failed to save offline order:", dbError);
+          toast({
+            title: "Error saving offline order",
+            description: "Could not save order locally.",
+            variant: "destructive",
+          });
+          throw dbError;
+        }
+      }
+
       toast({
         title: "Error submitting order",
         description: error.message || "Something went wrong",
@@ -107,6 +182,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       });
       throw error;
     }
+
   };
 
   const removeFromCart = (productId: string) => {

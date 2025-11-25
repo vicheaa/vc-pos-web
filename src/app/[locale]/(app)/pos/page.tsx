@@ -19,6 +19,9 @@ import { Pagination } from "@/components/ui/pagination";
 import { Search, Filter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/types";
+import { cacheProducts, getCachedProducts } from "@/lib/db";
+import { useToast } from "@/hooks/use-toast";
+
 
 const ITEMS_PER_PAGE = 20;
 const SEARCH_DEBOUNCE_MS = 300;
@@ -47,6 +50,47 @@ function POSContent() {
     categoryCode: selectedCategory === "all" ? undefined : selectedCategory,
   });
 
+  const [cachedProducts, setCachedProducts] = useState<Product[]>([]);
+  const { toast } = useToast();
+
+  // Map API products to POS products
+  const mappedProducts: Product[] = data?.data.map((p) => ({
+    id: p.code,
+    name: p.name,
+    category: p.category?.name || p.category_code,
+    price: p.selling_price,
+    stock: 100, // Default stock for now as per previous implementation
+    imageUrl: p.thumbnail,
+    thumbnail: p.thumbnail,
+    imageHint: p.description,
+    uom: p.uom?.name || 'Unit',
+  })) || [];
+
+  // Cache products when data is available
+  useEffect(() => {
+    if (mappedProducts.length > 0) {
+      cacheProducts(mappedProducts).catch(console.error);
+    }
+  }, [data]);
+
+  // Load cached products on error or if offline
+  useEffect(() => {
+    if (error || !navigator.onLine) {
+      getCachedProducts().then((products) => {
+        if (products.length > 0) {
+          setCachedProducts(products);
+          toast({
+            title: "Offline Mode",
+            description: "Loaded products from cache.",
+          });
+        }
+      });
+    }
+  }, [error]);
+
+  const displayProducts = mappedProducts.length > 0 ? mappedProducts : cachedProducts;
+
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -67,18 +111,7 @@ function POSContent() {
     setCurrentPage(1);
   };
 
-  // Map API products to POS products
-  const products: Product[] = data?.data.map((p) => ({
-    id: p.code,
-    name: p.name,
-    category: p.category?.name || p.category_code,
-    price: p.selling_price,
-    stock: 100, // Default stock for now as per previous implementation
-    imageUrl: p.thumbnail,
-    thumbnail: p.thumbnail,
-    imageHint: p.description,
-    uom: p.uom?.name || 'Unit',
-  })) || [];
+
 
   return (
     <div className="grid h-[calc(100vh-8rem)] grid-cols-1 gap-4 lg:grid-cols-3">
@@ -132,10 +165,11 @@ function POSContent() {
         {/* Product Grid */}
         <div className="flex-1 overflow-hidden rounded-lg border bg-background p-2">
           <ProductGrid 
-            products={products} 
-            isLoading={isLoading} 
-            error={error} 
+            products={displayProducts} 
+            isLoading={isLoading && displayProducts.length === 0} 
+            error={error && displayProducts.length === 0 ? error : null} 
           />
+
         </div>
 
         {/* Pagination */}

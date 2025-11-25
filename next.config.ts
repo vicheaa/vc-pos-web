@@ -55,4 +55,16 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withNextIntl(nextConfig);
+const withPWA = require("@ducanh2912/next-pwa").default({
+  dest: "public",
+  cacheOnFrontEndNav: true,
+  aggressiveFrontEndNavCaching: true,
+  reloadOnOnline: true,
+  swcMinify: true,
+  disable: false, // Enable in dev for testing offline support
+  workboxOptions: {
+    disableDevLogs: true,
+  },
+});
+
+export default withNextIntl(withPWA(nextConfig));

@@ -8,6 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { useState, useEffect } from 'react';
 import { imageUrl } from "@/lib/image-services";
+import { OrderReviewModal } from './OrderReviewModal';
 
 function QuantityInput({
   value,
@@ -49,14 +50,21 @@ function QuantityInput({
   );
 }
 
+
 export function Cart() {
   const { cartItems, updateQuantity, removeFromCart, cartSubtotal, cartTotal, totalItems, clearCart, submitOrder } = useCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
 
-  const handleCharge = async () => {
+  const handleCharge = () => {
+    setIsReviewOpen(true);
+  };
+
+  const handleConfirmPayment = async () => {
     try {
       setIsSubmitting(true);
       await submitOrder();
+      setIsReviewOpen(false);
     } catch (error) {
       // Error is handled in context
     } finally {
@@ -182,9 +190,20 @@ export function Cart() {
           disabled={cartItems.length === 0 || isSubmitting}
           onClick={handleCharge}
         >
-          {isSubmitting ? "Processing..." : `Charge $${cartTotal.toFixed(2)}`}
+          Charge ${cartTotal.toFixed(2)}
         </Button>
       </div>
+
+      <OrderReviewModal
+        open={isReviewOpen}
+        onOpenChange={setIsReviewOpen}
+        cartItems={cartItems}
+        subtotal={cartSubtotal}
+        tax={0}
+        total={cartTotal}
+        onConfirm={handleConfirmPayment}
+        isSubmitting={isSubmitting}
+      />
     </div>
   );
 }
