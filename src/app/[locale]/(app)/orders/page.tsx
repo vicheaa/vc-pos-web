@@ -1,12 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Permission } from "@/lib/permissions";
-import { orderApi } from "@/lib/api-services";
-import { ApiOrder } from "@/types";
 import {
   Table,
   TableBody,
@@ -18,34 +16,20 @@ import {
 import { Pagination } from "@/components/ui/pagination";
 import { format } from "date-fns";
 import { Loader2 } from "lucide-react";
+import { useOrders } from "@/hooks/useOrderQueries";
 
 function OrdersContent() {
   const router = useRouter();
-  const [orders, setOrders] = useState<ApiOrder[]>([]);
-  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [totalOrders, setTotalOrders] = useState(0);
-  const PER_PAGE = 10;
+  const PER_PAGE = 20;
 
-  useEffect(() => {
-    fetchOrders();
-  }, [page]);
+  const { data, isLoading, error } = useOrders({
+    page,
+    perPage: PER_PAGE,
+  });
 
-  const fetchOrders = async () => {
-    try {
-      setLoading(true);
-      const response = await orderApi.getOrders({
-        page,
-        per_page: PER_PAGE,
-      });
-      setOrders(response.orders);
-      setTotalOrders(response.total);
-    } catch (error) {
-      console.error("Failed to fetch orders:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const orders = data?.orders || [];
+  const totalOrders = data?.total || 0;
 
   return (
     <div className="space-y-4">
@@ -54,9 +38,13 @@ function OrdersContent() {
           <CardTitle>Orders</CardTitle>
         </CardHeader>
         <CardContent>
-          {loading ? (
+          {isLoading ? (
             <div className="flex justify-center py-8">
               <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : error ? (
+            <div className="text-center py-8 text-destructive">
+              Failed to load orders. Please try again.
             </div>
           ) : (
             <>
