@@ -82,7 +82,7 @@ function OrdersContent() {
                           </TableCell>
                           <TableCell>
                             <span
-                              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                              className={`inline-flex items-center rounded-full p-2 pt-3text-xs font-medium ${
                                 order.status === "COMPLETED"
                                   ? "bg-green-100 text-green-800"
                                   : "bg-yellow-100 text-yellow-800"

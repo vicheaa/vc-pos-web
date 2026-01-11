@@ -7,10 +7,10 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import type { Product, CartItem } from "@/types";
+import type { Product, CartItem, ParkedOrder } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { orderApi } from "@/lib/api-services";
-import { saveOfflineOrder, getOfflineOrders, deleteOfflineOrder } from "@/lib/db";
+import { saveOfflineOrder, getOfflineOrders, deleteOfflineOrder, saveParkedOrder, getParkedOrders, deleteParkedOrder } from "@/lib/db";
 
 
 interface CartContextType {
@@ -23,12 +23,19 @@ interface CartContextType {
   cartTotal: number;
   cartSubtotal: number;
   totalItems: number;
+  // Park Order Functions
+  parkedOrders: ParkedOrder[];
+  parkOrder: (note?: string) => Promise<void>;
+  restoreParkedOrder: (orderId: string) => Promise<void>;
+  discardParkedOrder: (orderId: string) => Promise<void>;
+  loadParkedOrders: () => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [parkedOrders, setParkedOrders] = useState<ParkedOrder[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -42,6 +49,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       setCartItems([]);
     }
 
+    // Load parked orders on mount
+    loadParkedOrders();
+
     // Sync offline orders when coming back online
     const handleOnline = async () => {
       toast({
@@ -54,6 +64,83 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     window.addEventListener('online', handleOnline);
     return () => window.removeEventListener('online', handleOnline);
   }, []);
+
+  const loadParkedOrders = async () => {
+    try {
+      const orders = await getParkedOrders();
+      setParkedOrders(orders.sort((a, b) => b.createdAt - a.createdAt));
+    } catch (error) {
+      console.error("Failed to load parked orders:", error);
+    }
+  };
+
+  const parkOrder = async (note?: string) => {
+    if (cartItems.length === 0) {
+      toast({
+        title: "Cart is empty",
+        description: "Add items to cart before parking",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      await saveParkedOrder(cartItems, note);
+      clearCart();
+      await loadParkedOrders();
+      toast({
+        title: "Order parked",
+        description: note ? `Parked: ${note}` : "Order has been parked for later",
+      });
+    } catch (error) {
+      console.error("Failed to park order:", error);
+      toast({
+        title: "Error",
+        description: "Failed to park order",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const restoreParkedOrder = async (orderId: string) => {
+    const parkedOrder = parkedOrders.find((o) => o.id === orderId);
+    if (!parkedOrder) {
+      toast({
+        title: "Error",
+        description: "Parked order not found",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // If cart has items, ask for confirmation handled in UI
+    setCartItems(parkedOrder.items);
+    persistCart(parkedOrder.items);
+    await deleteParkedOrder(orderId);
+    await loadParkedOrders();
+    toast({
+      title: "Order restored",
+      description: "Parked order has been restored to cart",
+    });
+  };
+
+  const discardParkedOrder = async (orderId: string) => {
+    try {
+      await deleteParkedOrder(orderId);
+      await loadParkedOrders();
+      toast({
+        title: "Order discarded",
+        description: "Parked order has been removed",
+      });
+    } catch (error) {
+      console.error("Failed to discard parked order:", error);
+      toast({
+        title: "Error",
+        description: "Failed to discard parked order",
+        variant: "destructive",
+      });
+    }
+  };
 
   const syncOfflineOrders = async () => {
     try {
@@ -236,6 +323,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         cartTotal,
         cartSubtotal,
         totalItems,
+        parkedOrders,
+        parkOrder,
+        restoreParkedOrder,
+        discardParkedOrder,
+        loadParkedOrders,
       }}
     >
       {children}

@@ -85,7 +85,9 @@ export function SidebarNav() {
                         <span className="sr-only">{item.label}</span>
                       </Link>
                     </TooltipTrigger>
-                    <TooltipContent side="right">{item.label}</TooltipContent>
+                    <TooltipContent className="z-50" side="right">
+                      {item.label}
+                    </TooltipContent>
                   </Tooltip>
                 </PermissionGate>
               );
@@ -118,7 +120,9 @@ export function SidebarNav() {
                         <span className="sr-only">{item.label}</span>
                       </Link>
                     </TooltipTrigger>
-                    <TooltipContent side="right">{item.label}</TooltipContent>
+                    <TooltipContent className="z-50" side="right">
+                      {item.label}
+                    </TooltipContent>
                   </Tooltip>
                 </PermissionGate>
               );

@@ -2,13 +2,32 @@
 
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
-import { Plus, Minus, Trash2 } from 'lucide-react';
+import { Plus, Minus, Trash2, PauseCircle, PlayCircle, X, Clock } from 'lucide-react';
 import Image from 'next/image';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { useState, useEffect } from 'react';
 import { imageUrl } from "@/lib/image-services";
 import { OrderReviewModal } from './OrderReviewModal';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
 
 function QuantityInput({
   value,
@@ -52,9 +71,27 @@ function QuantityInput({
 
 
 export function Cart() {
-  const { cartItems, updateQuantity, removeFromCart, cartSubtotal, cartTotal, totalItems, clearCart, submitOrder } = useCart();
+  const { 
+    cartItems, 
+    updateQuantity, 
+    removeFromCart, 
+    cartSubtotal, 
+    cartTotal, 
+    totalItems, 
+    clearCart, 
+    submitOrder,
+    parkedOrders,
+    parkOrder,
+    restoreParkedOrder,
+    discardParkedOrder,
+  } = useCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
+  const [isParkedSheetOpen, setIsParkedSheetOpen] = useState(false);
+  const [parkNote, setParkNote] = useState('');
+  const [showParkDialog, setShowParkDialog] = useState(false);
+  const [restoreConfirmId, setRestoreConfirmId] = useState<string | null>(null);
+  const [discardConfirmId, setDiscardConfirmId] = useState<string | null>(null);
 
   const handleCharge = () => {
     setIsReviewOpen(true);
@@ -72,21 +109,168 @@ export function Cart() {
     }
   };
 
+  const handleParkOrder = async () => {
+    await parkOrder(parkNote || undefined);
+    setParkNote('');
+    setShowParkDialog(false);
+  };
+
+  const handleRestoreOrder = async (orderId: string) => {
+    if (cartItems.length > 0) {
+      setRestoreConfirmId(orderId);
+    } else {
+      await restoreParkedOrder(orderId);
+      setIsParkedSheetOpen(false);
+    }
+  };
+
+  const confirmRestore = async () => {
+    if (restoreConfirmId) {
+      await restoreParkedOrder(restoreConfirmId);
+      setRestoreConfirmId(null);
+      setIsParkedSheetOpen(false);
+    }
+  };
+
+  const handleDiscardOrder = (orderId: string) => {
+    setDiscardConfirmId(orderId);
+  };
+
+  const confirmDiscard = async () => {
+    if (discardConfirmId) {
+      await discardParkedOrder(discardConfirmId);
+      setDiscardConfirmId(null);
+    }
+  };
+
+  const formatTime = (timestamp: number) => {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
+  const formatDate = (timestamp: number) => {
+    const date = new Date(timestamp);
+    const today = new Date();
+    if (date.toDateString() === today.toDateString()) {
+      return 'Today';
+    }
+    return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+  };
+
   return (
     <div className="flex h-full flex-col backdrop-blur-sm bg-background/50">
       <div className="flex items-center justify-between p-4 pb-2">
         <h2 className="text-lg font-semibold tracking-tight text-foreground">Current Order</h2>
-        {cartItems.length > 0 && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={clearCart}
-            className="h-8 px-2 text-muted-foreground hover:bg-background hover:text-destructive"
-          >
-            <Trash2 className="mr-2 h-4 w-4" />
-            Clear
-          </Button>
-        )}
+        <div className="flex items-center gap-2">
+          {/* Parked Orders Button */}
+          <Sheet open={isParkedSheetOpen} onOpenChange={setIsParkedSheetOpen}>
+            <SheetTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 px-2 relative"
+              >
+                <PauseCircle className="mr-1 h-4 w-4" />
+                Parked
+                {parkedOrders.length > 0 && (
+                  <Badge 
+                    variant="destructive" 
+                    className="absolute -right-2 -top-2 h-5 w-5 p-0 flex items-center justify-center text-xs"
+                  >
+                    {parkedOrders.length}
+                  </Badge>
+                )}
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[350px] sm:w-[400px]">
+              <SheetHeader>
+                <SheetTitle>Parked Orders</SheetTitle>
+                <SheetDescription>
+                  Orders saved for later. Click to restore.
+                </SheetDescription>
+              </SheetHeader>
+              <ScrollArea className="h-[calc(100vh-10rem)] mt-4">
+                {parkedOrders.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+                    <PauseCircle className="h-12 w-12 mb-4 opacity-50" />
+                    <p>No parked orders</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {parkedOrders.map((order) => {
+                      const orderTotal = order.items.reduce(
+                        (sum, item) => sum + item.product.price * item.quantity,
+                        0
+                      );
+                      const itemCount = order.items.reduce(
+                        (sum, item) => sum + item.quantity,
+                        0
+                      );
+                      return (
+                        <div
+                          key={order.id}
+                          className="rounded-lg border bg-card p-3 space-y-2"
+                        >
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <Clock className="h-3 w-3" />
+                                {formatDate(order.createdAt)} at {formatTime(order.createdAt)}
+                              </div>
+                              {order.note && (
+                                <p className="text-sm font-medium mt-1">{order.note}</p>
+                              )}
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-6 w-6 text-muted-foreground hover:text-destructive"
+                              onClick={() => handleDiscardOrder(order.id)}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          
+                          <div className="text-sm">
+                            <span className="text-muted-foreground">{itemCount} items</span>
+                            <span className="mx-2">•</span>
+                            <span className="font-semibold">${orderTotal.toFixed(2)}</span>
+                          </div>
+
+                          <div className="text-xs text-muted-foreground line-clamp-1">
+                            {order.items.map((item) => item.product.name).join(', ')}
+                          </div>
+
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-full"
+                            onClick={() => handleRestoreOrder(order.id)}
+                          >
+                            <PlayCircle className="mr-2 h-4 w-4" />
+                            Restore Order
+                          </Button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </ScrollArea>
+            </SheetContent>
+          </Sheet>
+
+          {cartItems.length > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearCart}
+              className="h-8 px-2 text-muted-foreground hover:bg-background hover:text-destructive"
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Clear
+            </Button>
+          )}
+        </div>
       </div>
 
       <ScrollArea className="flex-1 px-4">
@@ -184,14 +368,24 @@ export function Cart() {
           </div>
         </div>
 
-        <Button
-          className="mt-4 w-full bg-accent rounded-lg font-semibold hover:bg-accent/90"
-          size="lg"
-          disabled={cartItems.length === 0 || isSubmitting}
-          onClick={handleCharge}
-        >
-          Charge ${cartTotal.toFixed(2)}
-        </Button>
+        <div className="mt-4 flex gap-2">
+          <Button
+            variant="outline"
+            className=" hover:bg-primary"
+            disabled={cartItems.length === 0}
+            onClick={() => setShowParkDialog(true)}
+          >
+            <PauseCircle className=" h-4" />
+          </Button>
+          <Button
+            className="flex-1 bg-accent font-semibold hover:bg-accent/90"
+            size="lg"
+            disabled={cartItems.length === 0 || isSubmitting}
+            onClick={handleCharge}
+          >
+            Charge ${cartTotal.toFixed(2)}
+          </Button>
+        </div>
       </div>
 
       <OrderReviewModal
@@ -204,6 +398,65 @@ export function Cart() {
         onConfirm={handleConfirmPayment}
         isSubmitting={isSubmitting}
       />
+
+      {/* Park Order Dialog */}
+      <AlertDialog open={showParkDialog} onOpenChange={setShowParkDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Park this order?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Save this order for later. You can add an optional note to help identify it.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <Input
+            placeholder="Add a note (optional)"
+            value={parkNote}
+            onChange={(e) => setParkNote(e.target.value)}
+            className="mt-2"
+          />
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setParkNote('')}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleParkOrder}>Park Order</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Restore Confirmation Dialog */}
+      <AlertDialog open={!!restoreConfirmId} onOpenChange={() => setRestoreConfirmId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Replace current cart?</AlertDialogTitle>
+            <AlertDialogDescription>
+              You have items in your cart. Restoring this parked order will replace them.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmRestore}>Replace Cart</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Discard Confirmation Dialog */}
+      <AlertDialog open={!!discardConfirmId} onOpenChange={() => setDiscardConfirmId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Discard parked order?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. The parked order will be permanently deleted.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={confirmDiscard}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Discard
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

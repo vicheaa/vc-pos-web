@@ -1,4 +1,3 @@
-// API Product types (matches backend response)
 export interface UOM {
   id: number;
   name: string;
@@ -35,11 +34,10 @@ export interface Category {
   code: string;
   name: string;
   name_kh: string;
-  thumnail: string; // Note: API has typo "thumnail" instead of "thumbnail"
+  thumnail: string;
   description: string;
 }
 
-// Legacy Product type (for compatibility)
 export type Product = {
   id: string;
   name: string;
@@ -55,6 +53,13 @@ export type Product = {
 export type CartItem = {
   product: Product;
   quantity: number;
+};
+
+export type ParkedOrder = {
+  id: string;
+  items: CartItem[];
+  createdAt: number;
+  note?: string;
 };
 
 export interface ApiOrder {
