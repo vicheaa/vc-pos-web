@@ -1,6 +1,6 @@
-"use client";
+// "use client";
 
-import { Link, usePathname } from "@/i18n/routing";
+import { Link, useLocation } from "@tanstack/react-router";
 import {
   Flame,
   LayoutDashboard,
@@ -36,7 +36,8 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 export function SidebarNav() {
-  const pathname = usePathname();
+  const location = useLocation()
+  const pathname = location.pathname;
   const { canAccessRoutePath } = usePermissions();
 
   // Filter nav items based on permissions
@@ -48,7 +49,7 @@ export function SidebarNav() {
   });
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+    <aside className="sticky top-0 h-screen z-20 hidden w-14 flex-col border-r bg-white sm:flex">
       <TooltipProvider delayDuration={0}>
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
           {/* <Link
@@ -74,7 +75,7 @@ export function SidebarNav() {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Link
-                        href={item.href}
+                        to={item.href}
                         className={cn(
                           "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8",
                           pathname.startsWith(item.href) &&
@@ -109,7 +110,7 @@ export function SidebarNav() {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Link
-                        href={item.href}
+                        to={item.href}
                         className={cn(
                           "flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8",
                           pathname.startsWith(item.href) &&

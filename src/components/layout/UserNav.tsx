@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -14,12 +14,11 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { LogOut, User as UserIcon, Settings } from "lucide-react";
 import { ThemeToggle } from "../ThemeToggle";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link, useNavigate } from "@tanstack/react-router";
 
 export function UserNav() {
   const { user, logout } = useAuth();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   if (!user) {
     return null;
@@ -32,7 +31,7 @@ export function UserNav() {
 
   const handleLogout = () => {
     logout();
-    router.push("/login");
+    navigate({ to: "/login" });
   };
 
   return (
@@ -60,13 +59,13 @@ export function UserNav() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href="/profile">
+            <Link to="/profile">
               <UserIcon className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href="/settings">
+            <Link to="/settings">
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
             </Link>

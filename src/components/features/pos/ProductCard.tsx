@@ -1,12 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import type { Product } from "@/types";
 import { useCart } from "@/contexts/CartContext";
-import { MouseEvent } from "react";
+import type { MouseEvent } from "react";
 import { imageUrl } from "@/lib/image-services";
 
 interface ProductCardProps {
@@ -25,15 +24,14 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Card
       onClick={handleAddToCart}
-      className="group flex h-full flex-col overflow-hidden transition-all hover:shadow-md border-none"
+      className="group flex h-full flex-col overflow-hidden transition-all hover:shadow-md border"
     >
       <div className="relative aspect-square w-full overflow-hidden bg-muted/50">
-        <Image
+        <img
           src={`${imageUrl}/${product.thumbnail}`}
           alt={product.name}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
         />
       </div>
 

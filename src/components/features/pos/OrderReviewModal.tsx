@@ -9,10 +9,9 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { CartItem } from '@/types';
+import type { CartItem } from '@/types';
 import { Receipt } from './Receipt';
 import { Printer, Check } from 'lucide-react';
-import Image from 'next/image';
 import { imageUrl } from '@/lib/image-services';
 
 interface OrderReviewModalProps {
@@ -59,11 +58,12 @@ export function OrderReviewModal({
                     key={item.product.id}
                     className="flex items-center justify-between text-sm"
                   >
-                    <Image
+                    <img
                       src={`${imageUrl}/${item.product.thumbnail}`}
                       alt={item.product.name}
                       width={50}
                       height={50}
+                      className="object-cover rounded"
                     />
                     <div className="flex flex-col">
                       <span className="font-medium">{item.product.name}</span>

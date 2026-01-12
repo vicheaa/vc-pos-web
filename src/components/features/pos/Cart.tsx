@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
 import { Plus, Minus, Trash2, PauseCircle, PlayCircle, X, Clock } from 'lucide-react';
-import Image from 'next/image';
+
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { useState, useEffect } from 'react';
@@ -158,7 +158,7 @@ export function Cart() {
   };
 
   return (
-    <div className="flex h-full flex-col backdrop-blur-sm bg-background/50">
+    <div className="flex h-full min-h-0 flex-col bg-background">
       <div className="flex items-center justify-between p-4 pb-2">
         <h2 className="text-lg font-semibold tracking-tight text-foreground">Current Order</h2>
         <div className="flex items-center gap-2">
@@ -273,9 +273,9 @@ export function Cart() {
         </div>
       </div>
 
-      <ScrollArea className="flex-1 px-4">
+      <ScrollArea className="flex-1 min-h-0 px-4">
         {cartItems.length === 0 ? (
-          <div className="flex h-[50vh] flex-col items-center justify-center text-center text-muted-foreground">
+          <div className="flex h-full flex-col items-center justify-center text-center text-muted-foreground py-12">
             <div className="mb-4 rounded-full bg-muted/50 p-4">
               <Plus className="h-8 w-8 opacity-50" />
             </div>
@@ -290,13 +290,11 @@ export function Cart() {
                 className="group flex items-center gap-3 rounded-lg border border-transparent bg-card/50 p-2 transition-colors hover:border-border hover:bg-card"
               >
                 <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md bg-muted">
-                  <Image
-                    src={`${imageUrl}/${item.product.thumbnail}`}
-                    alt={item.product.name}
-                    fill
-                    className="object-cover"
-                    sizes="30px"
-                  />
+                  <img
+                  src={`${imageUrl}/${item.product.thumbnail}`}
+                  alt={item.product.name}
+                  className="h-full w-full object-cover"
+                />
                 </div>
 
                 <div className="flex flex-1 flex-col gap-1 overflow-hidden">
@@ -350,7 +348,7 @@ export function Cart() {
         )}
       </ScrollArea>
 
-      <div className="mt-auto border-t bg-background/50 p-4 backdrop-blur-sm">
+      <div className="shrink-0 border-t bg-background p-4">
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Subtotal</span>
@@ -378,7 +376,7 @@ export function Cart() {
             <PauseCircle className=" h-4" />
           </Button>
           <Button
-            className="flex-1 bg-accent font-semibold hover:bg-accent/90"
+            className="flex-1 rounded-md bg-accent font-semibold hover:bg-accent/90"
             size="lg"
             disabled={cartItems.length === 0 || isSubmitting}
             onClick={handleCharge}

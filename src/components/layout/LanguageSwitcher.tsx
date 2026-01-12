@@ -1,7 +1,6 @@
-"use client";
+// "use client";
 
-import { useLocale } from "next-intl";
-import { usePathname, useRouter } from "@/i18n/routing";
+import { useTranslation } from "react-i18next";
 import {
   Select,
   SelectContent,
@@ -17,16 +16,15 @@ const languages = [
 ];
 
 export function LanguageSwitcher() {
-  const locale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
+  const { i18n } = useTranslation();
 
   const handleLanguageChange = (newLocale: string) => {
-    router.replace(pathname, { locale: newLocale });
+    i18n.changeLanguage(newLocale);
+    // Persist to localStorage (handled by i18next-browser-languagedetector)
   };
 
   return (
-    <Select value={locale} onValueChange={handleLanguageChange}>
+    <Select value={i18n.language} onValueChange={handleLanguageChange}>
       <SelectTrigger className="w-[140px]">
         <Globe className="mr-2 h-4 w-4" />
         <SelectValue placeholder="Select language" />

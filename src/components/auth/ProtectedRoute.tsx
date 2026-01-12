@@ -3,7 +3,7 @@
 import { useAuth } from "@/hooks/useAuth";
 import { usePermissions } from "@/hooks/usePermissions";
 import { Permission } from "@/lib/permissions";
-import { useRouter } from "@/i18n/routing";
+import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -44,7 +44,7 @@ export function ProtectedRoute({
 }: ProtectedRouteProps) {
   const { user, loading } = useAuth();
   const { checkAnyPermission, checkAllPermissions, hasRole } = usePermissions();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   // Check access permissions
   let hasAccess = true;
@@ -59,15 +59,15 @@ export function ProtectedRoute({
   useEffect(() => {
     // Redirect to login if not authenticated
     if (!loading && !user) {
-      router.push("/login");
+      navigate({ to: "/login" });
       return;
     }
 
     // Redirect to dashboard if authenticated but lacks permissions/role
     if (!loading && user && !hasAccess) {
-      router.replace("/dashboard");
+      navigate({ to: "/dashboard", replace: true });
     }
-  }, [user, loading, router, hasAccess]);
+  }, [user, loading, navigate, hasAccess]);
 
   // Show loading state
   if (loading || !user) {

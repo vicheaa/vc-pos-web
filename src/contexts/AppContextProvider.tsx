@@ -21,7 +21,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
           <CartProvider>{children}</CartProvider>
         </AuthProvider>
       </ThemeProvider>
-      {process.env.NODE_ENV === "development" && <ReactQueryDevtools />}
+      {import.meta.env.DEV && <ReactQueryDevtools />}
     </QueryClientProvider>
   );
 }

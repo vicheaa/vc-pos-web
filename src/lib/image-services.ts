@@ -1,1 +1,1 @@
-export const imageUrl = process.env.NEXT_PUBLIC_IMG_BASE_URL;
+export const imageUrl = import.meta.env.VITE_IMG_BASE_URL || "";

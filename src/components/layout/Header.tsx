@@ -1,7 +1,7 @@
-"use client";
-import { Link } from "@/i18n/routing";
+// "use client";
+import { Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 import {
   Flame,
   LayoutDashboard,
@@ -29,7 +29,7 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { cn } from "@/lib/utils";
 
 export function Header() {
-  const t = useTranslations();
+  const { t } = useTranslation();
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
   useEffect(() => {
@@ -63,14 +63,14 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 my-2 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 bg-white">
-      <div className="hidden text-sm font-semibold sm:block">
+    <header className="bg-white sticky top-0 py-1.5 px-4 flex items-center justify-between gap-4 border-b border-slate-200 ">
+      <div className="hidden text-sm font-semibold sm:block flex-shrink-0">
         <p>
           {" "}
           {t("header.vcPos")} {formatDateTime(currentDateTime)}
         </p>
       </div>
-      <div className="flex justify-center items-center gap-4">
+      <div className="flex flex-1 justify-end items-center gap-4">
         <Sheet>
           <SheetTrigger asChild>
             <Button size="icon" variant="outline" className="sm:hidden">
@@ -87,7 +87,7 @@ export function Header() {
             </VisuallyHidden>
             <nav className="grid gap-6 text-lg font-medium">
               <Link
-                href="/dashboard"
+                to="/dashboard"
                 className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
               >
                 <Flame className="h-5 w-5 transition-all group-hover:scale-110" />
@@ -96,7 +96,7 @@ export function Header() {
               {navItems.map((item) => (
                 <Link
                   key={item.href}
-                  href={item.href}
+                  to={item.href}
                   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
                 >
                   <item.icon className="h-5 w-5" />

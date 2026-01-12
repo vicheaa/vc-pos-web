@@ -1,10 +1,8 @@
 "use client";
-import Image from "next/image";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import type { ApiProduct } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
 
 interface ApiProductCardProps {
   product: ApiProduct;
@@ -12,6 +10,8 @@ interface ApiProductCardProps {
 }
 
 export function ApiProductCard({ product, onClick }: ApiProductCardProps) {
+  const imageUrl = `${import.meta.env.VITE_IMG_BASE_URL || ''}/${product.thumbnail}`;
+  
   return (
     <Card
       className={cn(
@@ -21,13 +21,11 @@ export function ApiProductCard({ product, onClick }: ApiProductCardProps) {
       onClick={onClick}
     >
       <div className="relative aspect-square w-full bg-muted">
-        <Image
-          src={`${process.env.NEXT_PUBLIC_IMG_BASE_URL}/${product.thumbnail}`}
+        <img
+          src={imageUrl}
           alt={product.name}
-          fill
-          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
-          className="object-cover"
-          priority={true}
+          className="h-full w-full object-cover"
+          loading="lazy"
         />
         {!product.is_active && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/50">

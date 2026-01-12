@@ -29,7 +29,7 @@ export class AuthApiService {
     if (response.token) {
       Cookies.set("auth_token", response.token, {
         expires: 7,
-        secure: process.env.NODE_ENV === "production",
+        secure: import.meta.env.PROD,
         sameSite: "strict",
       });
     }
